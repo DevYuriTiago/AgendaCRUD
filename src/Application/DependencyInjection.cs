@@ -1,4 +1,6 @@
 using System.Reflection;
+using ContactAgenda.Application.Behaviors;
+using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace ContactAgenda.Application;
@@ -12,9 +14,20 @@ public static class DependencyInjection
     {
         var assembly = Assembly.GetExecutingAssembly();
 
-        // MediatR
-        services.AddMediatR(config => 
-            config.RegisterServicesFromAssembly(assembly));
+        // MediatR with Pipeline Behaviors
+        services.AddMediatR(config =>
+        {
+            config.RegisterServicesFromAssembly(assembly);
+            
+            // Register pipeline behaviors in order
+            config.AddOpenBehavior(typeof(UnhandledExceptionBehavior<,>));
+            config.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            config.AddOpenBehavior(typeof(LoggingBehavior<,>));
+            config.AddOpenBehavior(typeof(PerformanceBehavior<,>));
+        });
+
+        // FluentValidation
+        services.AddValidatorsFromAssembly(assembly);
 
         // AutoMapper
         services.AddAutoMapper(assembly);
