@@ -1,0 +1,59 @@
+version: '3.8'
+
+services:
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: contact-agenda-db
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=YourStrong@Passw0rd
+      - MSSQL_PID=Developer
+    ports:
+      - "1433:1433"
+    volumes:
+      - sqlserver_data:/var/opt/mssql
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "YourStrong@Passw0rd" -Q "SELECT 1" || exit 1
+      interval: 10s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+    networks:
+      - contact-agenda-network
+
+  api:
+    build:
+      context: ./src/Api
+      dockerfile: Dockerfile
+    container_name: contact-agenda-api
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=sqlserver,1433;Database=ContactAgendaDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True
+    ports:
+      - "5000:8080"
+    depends_on:
+      sqlserver:
+        condition: service_healthy
+    networks:
+      - contact-agenda-network
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: contact-agenda-frontend
+    environment:
+      - VITE_API_URL=http://localhost:5000/api
+    ports:
+      - "5173:80"
+    depends_on:
+      - api
+    networks:
+      - contact-agenda-network
+
+volumes:
+  sqlserver_data:
+
+networks:
+  contact-agenda-network:
+    driver: bridge

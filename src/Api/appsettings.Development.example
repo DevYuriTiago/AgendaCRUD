@@ -1,0 +1,14 @@
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft.AspNetCore": "Information",
+      "Microsoft.EntityFrameworkCore": "Information"
+    }
+  },
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=ContactAgendaDb;Trusted_Connection=True;MultipleActiveResultSets=true;TrustServerCertificate=True",
+    "_comment1": "For SQL Server container:",
+    "_comment2": "Server=localhost,1433;Database=ContactAgendaDb;User Id=sa;Password=YourStrong@Passw0rd;TrustServerCertificate=True"
+  }
+}
