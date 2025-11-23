@@ -77,8 +77,8 @@ public class EmailTests
     [Fact]
     public void Create_WithTooLongEmail_ShouldThrowException()
     {
-        // Arrange - email with 255 characters
-        var emailString = new string('a', 240) + "@example.com";
+        // Arrange - email with 255 characters (exceeds max of 254)
+        var emailString = new string('a', 243) + "@example.com"; // 243 + 12 = 255 chars
 
         // Act
         var act = () => Email.Create(emailString);
