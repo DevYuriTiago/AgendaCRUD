@@ -11,14 +11,16 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, AuthResponse>
 {
     private readonly IUserRepository _userRepository;
     private readonly IRoleRepository _roleRepository;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IPasswordHasher _passwordHasher;
     private readonly ITokenService _tokenService;
 
-    public RegisterHandler(IUserRepository userRepository, IRoleRepository roleRepository, 
-        IPasswordHasher passwordHasher, ITokenService tokenService)
+    public RegisterHandler(IUserRepository userRepository, IRoleRepository roleRepository,
+        IRefreshTokenRepository refreshTokenRepository, IPasswordHasher passwordHasher, ITokenService tokenService)
     {
         _userRepository = userRepository;
         _roleRepository = roleRepository;
+        _refreshTokenRepository = refreshTokenRepository;
         _passwordHasher = passwordHasher;
         _tokenService = tokenService;
     }
@@ -44,11 +46,11 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, AuthResponse>
         var roles = new[] { Role.Names.User };
         var accessToken = _tokenService.GenerateAccessToken(user, roles);
         var refreshToken = await _tokenService.CreateRefreshTokenAsync(user.Id, "127.0.0.1");
+        await _refreshTokenRepository.AddAsync(refreshToken, cancellationToken);
 
         return new AuthResponse(
             user.Id, user.Username, user.Email, user.FullName, roles,
-            accessToken, refreshToken.Token,
-            DateTime.UtcNow.AddMinutes(15)
+            accessToken, refreshToken.Token, refreshToken.ExpiresAt
         );
     }
 }

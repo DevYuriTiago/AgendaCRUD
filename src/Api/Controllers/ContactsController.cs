@@ -2,6 +2,7 @@ using ContactAgenda.Application.Commands;
 using ContactAgenda.Application.DTOs;
 using ContactAgenda.Application.Queries;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ContactAgenda.Api.Controllers;
@@ -12,6 +13,7 @@ namespace ContactAgenda.Api.Controllers;
 [ApiController]
 [Route("api/[controller]")]
 [Produces("application/json")]
+[Authorize]
 public class ContactsController : ControllerBase
 {
     private readonly IMediator _mediator;
