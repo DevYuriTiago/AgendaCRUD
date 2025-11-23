@@ -4,7 +4,7 @@
     <ConfirmDialog />
     
     <div class="layout-wrapper">
-      <header class="app-header">
+      <header v-if="authStore.isAuthenticated" class="app-header">
         <div class="container">
           <div class="header-content">
             <div class="logo">
@@ -12,22 +12,34 @@
               <h1>Contact Agenda</h1>
             </div>
             <nav class="nav-menu">
-              <router-link to="/" class="nav-link">
+              <router-link to="/contacts" class="nav-link">
                 <i class="pi pi-th-large"></i>
                 <span>Contacts</span>
               </router-link>
+              <div class="user-menu">
+                <Button
+                  :label="authStore.user?.fullName"
+                  icon="pi pi-user"
+                  text
+                  class="user-button"
+                  @click="toggleMenu"
+                  aria-haspopup="true"
+                  aria-controls="overlay_menu"
+                />
+                <Menu ref="menu" id="overlay_menu" :model="menuItems" :popup="true" />
+              </div>
             </nav>
           </div>
         </div>
       </header>
 
       <main class="app-main">
-        <div class="container">
+        <div :class="{ container: authStore.isAuthenticated }">
           <router-view />
         </div>
       </main>
 
-      <footer class="app-footer">
+      <footer v-if="authStore.isAuthenticated" class="app-footer">
         <div class="container">
           <p>&copy; 2025 Contact Agenda. Built with Vue 3 + PrimeVue</p>
         </div>
@@ -37,8 +49,54 @@
 </template>
 
 <script setup>
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import { useConfirm } from 'primevue/useconfirm'
+import { useToast } from 'primevue/usetoast'
+import { useAuthStore } from './store/authStore'
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
+import Button from 'primevue/button'
+import Menu from 'primevue/menu'
+
+const router = useRouter()
+const confirm = useConfirm()
+const toast = useToast()
+const authStore = useAuthStore()
+const menu = ref()
+
+const menuItems = ref([
+  {
+    label: 'Profile',
+    icon: 'pi pi-user',
+    command: () => {
+      toast.add({ severity: 'info', summary: 'Profile', detail: 'Profile feature coming soon', life: 3000 })
+    }
+  },
+  {
+    separator: true
+  },
+  {
+    label: 'Logout',
+    icon: 'pi pi-sign-out',
+    command: () => {
+      confirm.require({
+        message: 'Are you sure you want to logout?',
+        header: 'Logout Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        accept: () => {
+          authStore.logout()
+          toast.add({ severity: 'success', summary: 'Logged out', detail: 'See you soon!', life: 3000 })
+          router.push('/login')
+        }
+      })
+    }
+  }
+])
+
+const toggleMenu = (event) => {
+  menu.value.toggle(event)
+}
 </script>
 
 <style scoped>
@@ -47,7 +105,6 @@ import ConfirmDialog from 'primevue/confirmdialog'
   display: flex;
   flex-direction: column;
 }
-
 .app-header {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
@@ -98,6 +155,20 @@ import ConfirmDialog from 'primevue/confirmdialog'
 .nav-link:hover {
   background: rgba(255, 255, 255, 0.3);
   transform: translateY(-2px);
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+}
+
+.user-menu .p-button {
+  color: white;
+  font-weight: 500;
+}
+
+.user-menu .p-button:hover {
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .app-main {
