@@ -2,6 +2,7 @@ using ContactAgenda.Application.Interfaces;
 using ContactAgenda.Domain.Repositories;
 using ContactAgenda.Infrastructure.Persistence;
 using ContactAgenda.Infrastructure.Repositories;
+using ContactAgenda.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,6 +27,13 @@ public static class DependencyInjection
         // Repositories
         services.AddScoped<IContactRepository, EfContactRepository>();
         services.AddScoped<IContactReadRepository, DapperContactReadRepository>();
+        services.AddScoped<IUserRepository, EfUserRepository>();
+        services.AddScoped<IRoleRepository, EfRoleRepository>();
+        services.AddScoped<IRefreshTokenRepository, EfRefreshTokenRepository>();
+
+        // Services
+        services.AddScoped<ITokenService, TokenService>();
+        services.AddScoped<IPasswordHasher, PasswordHasher>();
 
         return services;
     }

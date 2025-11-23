@@ -14,6 +14,10 @@ public class ContactAgendaDbContext : DbContext
     }
 
     public DbSet<Contact> Contacts => Set<Contact>();
+    public DbSet<User> Users => Set<User>();
+    public DbSet<Role> Roles => Set<Role>();
+    public DbSet<UserRole> UserRoles => Set<UserRole>();
+    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
