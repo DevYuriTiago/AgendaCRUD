@@ -3,11 +3,11 @@
     <div class="page-header">
       <div class="header-content">
         <div>
-          <h1 class="page-title">Manage Your Contacts</h1>
-          <p class="page-subtitle">Create, edit, and organize your contact list efficiently</p>
+          <h1 class="page-title">Gerenciar Seus Contatos</h1>
+          <p class="page-subtitle">Crie, edite e organize sua lista de contatos de forma eficiente</p>
         </div>
         <Button
-          label="New Contact"
+          label="Novo Contato"
           icon="pi pi-plus"
           class="p-button-lg create-button"
           @click="openCreateDialog"
@@ -25,7 +25,7 @@
     <!-- Create/Edit Dialog -->
     <Dialog
       v-model:visible="dialogVisible"
-      :header="dialogMode === 'create' ? 'Create New Contact' : 'Edit Contact'"
+      :header="dialogMode === 'create' ? 'Criar Novo Contato' : 'Editar Contato'"
       :modal="true"
       :closable="true"
       :draggable="false"
@@ -67,8 +67,8 @@ onMounted(async () => {
   } catch (error) {
     toast.add({
       severity: 'error',
-      summary: 'Error',
-      detail: 'Failed to load contacts',
+      summary: 'Erro',
+      detail: 'Falha ao carregar contatos',
       life: 3000
     })
   }
@@ -102,16 +102,16 @@ async function handleSubmit(contactData) {
       await contactStore.createContact(contactData)
       toast.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Contact created successfully',
+        summary: 'Sucesso',
+        detail: 'Contato criado com sucesso',
         life: 3000
       })
     } else {
       await contactStore.updateContact(selectedContact.value.id, contactData)
       toast.add({
         severity: 'success',
-        summary: 'Success',
-        detail: 'Contact updated successfully',
+        summary: 'Sucesso',
+        detail: 'Contato atualizado com sucesso',
         life: 3000
       })
     }
@@ -119,8 +119,8 @@ async function handleSubmit(contactData) {
   } catch (error) {
     toast.add({
       severity: 'error',
-      summary: 'Error',
-      detail: error.message || 'Operation failed',
+      summary: 'Erro',
+      detail: error.message || 'Operação falhou',
       life: 5000
     })
   }
@@ -128,8 +128,8 @@ async function handleSubmit(contactData) {
 
 function confirmDelete(contact) {
   confirm.require({
-    message: `Are you sure you want to delete "${contact.name}"?`,
-    header: 'Confirm Deletion',
+    message: `Tem certeza que deseja excluir "${contact.name}"?`,
+    header: 'Confirmar Exclusão',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
     accept: () => handleDelete(contact.id)
@@ -141,15 +141,15 @@ async function handleDelete(contactId) {
     await contactStore.deleteContact(contactId)
     toast.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Contact deleted successfully',
+      summary: 'Sucesso',
+      detail: 'Contato excluído com sucesso',
       life: 3000
     })
   } catch (error) {
     toast.add({
       severity: 'error',
-      summary: 'Error',
-      detail: error.message || 'Failed to delete contact',
+      summary: 'Erro',
+      detail: error.message || 'Falha ao excluir contato',
       life: 5000
     })
   }
@@ -158,15 +158,43 @@ async function handleDelete(contactId) {
 
 <style scoped>
 .contacts-page {
-  animation: fadeIn 0.4s ease-in-out;
+  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #f5f7fa 0%, #e3e7f0 100%);
+  padding: 2rem;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .page-header {
   margin-bottom: 2rem;
-  padding: 2rem;
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15), 0 0 1px rgba(255,255,255,0.5) inset;
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  position: relative;
+  overflow: hidden;
+}
+
+.page-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
 }
 
 .header-content {
@@ -179,18 +207,20 @@ async function handleDelete(contactId) {
 
 .page-title {
   margin: 0 0 0.5rem 0;
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.25rem;
+  font-weight: 800;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  letter-spacing: -0.5px;
 }
 
 .page-subtitle {
   margin: 0;
-  color: #6c757d;
+  color: #64748b;
   font-size: 1.1rem;
+  font-weight: 500;
 }
 
 .create-button {
@@ -199,34 +229,75 @@ async function handleDelete(contactId) {
   padding: 1rem 2rem;
   font-size: 1rem;
   font-weight: 600;
-  border-radius: 10px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+.create-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.create-button:hover::before {
+  left: 100%;
 }
 
 .create-button:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
+}
+
+.create-button:active {
+  transform: translateY(-1px);
+}
+
+:deep(.contact-dialog .p-dialog) {
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 :deep(.contact-dialog .p-dialog-header) {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 1.5rem;
-  border-radius: 12px 12px 0 0;
+  padding: 1.75rem 2rem;
+  border-radius: 0;
+  border-bottom: none;
+}
+
+:deep(.contact-dialog .p-dialog-title) {
+  font-weight: 700;
+  font-size: 1.5rem;
+  letter-spacing: -0.3px;
 }
 
 :deep(.contact-dialog .p-dialog-header-icon) {
   color: white;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: all 0.2s ease;
 }
 
 :deep(.contact-dialog .p-dialog-header-icon:hover) {
   background: rgba(255, 255, 255, 0.2);
+  transform: rotate(90deg);
 }
 
 :deep(.contact-dialog .p-dialog-content) {
   padding: 0;
-  border-radius: 0 0 12px 12px;
+  border-radius: 0;
+  background: #fff;
 }
 
 @media (max-width: 768px) {

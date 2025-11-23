@@ -3,17 +3,17 @@
     <div class="login-card">
       <div class="login-header">
         <i class="pi pi-users" style="font-size: 3rem"></i>
-        <h1>Contact Agenda</h1>
-        <p>Sign in to manage your contacts</p>
+        <h1>Agenda de Contatos</h1>
+        <p>Entre para gerenciar seus contatos</p>
       </div>
 
       <form @submit.prevent="handleSubmit" class="login-form">
         <div class="field">
-          <label for="username">Username</label>
+          <label for="username">Nome de Usuário</label>
           <InputText
             id="username"
             v-model="formData.username"
-            placeholder="Enter your username"
+            placeholder="Digite seu nome de usuário"
             :class="{ 'p-invalid': errors.username }"
             @blur="validateField('username')"
           />
@@ -21,11 +21,11 @@
         </div>
 
         <div class="field">
-          <label for="password">Password</label>
+          <label for="password">Senha</label>
           <Password
             id="password"
             v-model="formData.password"
-            placeholder="Enter your password"
+            placeholder="Digite sua senha"
             :feedback="false"
             toggleMask
             :class="{ 'p-invalid': errors.password }"
@@ -36,15 +36,15 @@
 
         <Button
           type="submit"
-          label="Sign In"
+          label="Entrar"
           icon="pi pi-sign-in"
           :loading="loading"
           class="w-full login-button"
         />
 
         <div class="register-link">
-          Don't have an account?
-          <router-link to="/register">Sign up here</router-link>
+          Não tem uma conta?
+          <router-link to="/register">Cadastre-se aqui</router-link>
         </div>
       </form>
     </div>
@@ -92,8 +92,8 @@ const handleSubmit = async () => {
 
     toast.add({
       severity: 'success',
-      summary: 'Welcome back!',
-      detail: `Logged in as ${authStore.user.username}`,
+      summary: 'Bem-vindo de volta!',
+      detail: `Conectado como ${authStore.user.username}`,
       life: 3000
     })
 
@@ -106,8 +106,8 @@ const handleSubmit = async () => {
     } else {
       toast.add({
         severity: 'error',
-        summary: 'Login Failed',
-        detail: err.response?.data?.message || 'Invalid username or password',
+        summary: 'Falha no Login',
+        detail: err.response?.data?.message || 'Nome de usuário ou senha inválidos',
         life: 5000
       })
     }
@@ -125,37 +125,79 @@ const handleSubmit = async () => {
   justify-content: center;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.login-container::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+  border-radius: 50%;
+  top: -100px;
+  left: -100px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.login-container::after {
+  content: '';
+  position: absolute;
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
+  border-radius: 50%;
+  bottom: -150px;
+  right: -150px;
+  animation: float 8s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translate(0, 0); }
+  50% { transform: translate(30px, 30px); }
 }
 
 .login-card {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.5) inset;
   padding: 3rem;
   width: 100%;
   max-width: 450px;
-  animation: fadeInUp 0.5s ease-out;
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 1;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(30px);
+    transform: translateY(40px) scale(0.95);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }
 
 .login-header {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
 }
 
 .login-header i {
   color: #667eea;
   margin-bottom: 1rem;
+  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
 }
 
 .login-header h1 {
@@ -164,11 +206,13 @@ const handleSubmit = async () => {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 700;
 }
 
 .login-header p {
-  color: #64748b;
+  color: #718096;
   margin: 0;
+  font-weight: 500;
 }
 
 .login-form {
@@ -185,36 +229,110 @@ const handleSubmit = async () => {
 
 .field label {
   font-weight: 600;
-  color: #334155;
+  color: #2d3748;
+  font-size: 0.95rem;
+  letter-spacing: 0.3px;
+}
+
+:deep(.p-inputtext),
+:deep(.p-password-input) {
+  width: 100%;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  background: #f8fafc;
+}
+
+:deep(.p-inputtext:hover),
+:deep(.p-password-input:hover) {
+  border-color: #cbd5e0;
+  background: #fff;
+}
+
+:deep(.p-inputtext:focus),
+:deep(.p-password-input:focus) {
+  border-color: #667eea;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12), 0 4px 12px rgba(102, 126, 234, 0.15);
+  background: #fff;
+  transform: translateY(-1px);
 }
 
 .login-button {
   margin-top: 1rem;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
-  padding: 0.75rem;
-  font-size: 1rem;
+  padding: 1rem;
+  font-size: 1.1rem;
   font-weight: 600;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+}
+
+.login-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+.login-button:hover::before {
+  left: 100%;
 }
 
 .login-button:hover {
-  background: linear-gradient(135deg, #5568d3 0%, #6a3f8f 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+}
+
+.login-button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
 }
 
 .register-link {
   text-align: center;
-  margin-top: 1rem;
-  color: #64748b;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e2e8f0;
+  color: #718096;
+  font-size: 0.95rem;
 }
 
 .register-link a {
   color: #667eea;
-  font-weight: 600;
   text-decoration: none;
+  font-weight: 600;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.register-link a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+  transition: width 0.3s ease;
+}
+
+.register-link a:hover::after {
+  width: 100%;
 }
 
 .register-link a:hover {
-  text-decoration: underline;
+  color: #764ba2;
 }
 
 .p-error {

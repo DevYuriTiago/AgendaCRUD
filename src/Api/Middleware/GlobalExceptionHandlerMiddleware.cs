@@ -36,7 +36,7 @@ public class GlobalExceptionHandlerMiddleware
     private static Task HandleExceptionAsync(HttpContext context, Exception exception)
     {
         var statusCode = HttpStatusCode.InternalServerError;
-        var message = "An internal server error occurred";
+        var message = "Ocorreu um erro interno no servidor";
         var errors = new Dictionary<string, string[]>();
 
         switch (exception)
@@ -53,7 +53,7 @@ public class GlobalExceptionHandlerMiddleware
 
             case ArgumentException argEx:
                 statusCode = HttpStatusCode.BadRequest;
-                message = "Validation failed";
+                message = "Falha na validação";
                 errors.Add(argEx.ParamName ?? "field", new[] { argEx.Message });
                 break;
 

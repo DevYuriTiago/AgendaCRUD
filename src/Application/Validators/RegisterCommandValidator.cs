@@ -8,26 +8,26 @@ public class RegisterCommandValidator : AbstractValidator<RegisterCommand>
     public RegisterCommandValidator()
     {
         RuleFor(x => x.Username)
-            .NotEmpty().WithMessage("Username is required")
-            .Length(3, 50).WithMessage("Username must be between 3 and 50 characters")
+            .NotEmpty().WithMessage("Nome de usuário é obrigatório")
+            .Length(3, 50).WithMessage("Nome de usuário deve ter entre 3 e 50 caracteres")
             .Matches(@"^[a-zA-Z0-9._-]+$")
-            .WithMessage("Username can only contain alphanumeric characters, dots, hyphens, and underscores");
+            .WithMessage("Nome de usuário pode conter apenas caracteres alfanuméricos, pontos, hífens e sublinhados");
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Email is required")
-            .EmailAddress().WithMessage("Email must be a valid email address")
-            .MaximumLength(254).WithMessage("Email must not exceed 254 characters");
+            .NotEmpty().WithMessage("E-mail é obrigatório")
+            .EmailAddress().WithMessage("E-mail deve ser um endereço de e-mail válido")
+            .MaximumLength(254).WithMessage("E-mail não pode exceder 254 caracteres");
 
         RuleFor(x => x.Password)
-            .NotEmpty().WithMessage("Password is required")
-            .MinimumLength(8).WithMessage("Password must be at least 8 characters")
-            .Matches(@"[A-Z]").WithMessage("Password must contain at least one uppercase letter")
-            .Matches(@"[a-z]").WithMessage("Password must contain at least one lowercase letter")
-            .Matches(@"[0-9]").WithMessage("Password must contain at least one number")
-            .Matches(@"[@$!%*?&#]").WithMessage("Password must contain at least one special character (@$!%*?&#)");
+            .NotEmpty().WithMessage("Senha é obrigatória")
+            .MinimumLength(8).WithMessage("Senha deve ter pelo menos 8 caracteres")
+            .Matches(@"[A-Z]").WithMessage("Senha deve conter pelo menos uma letra maiúscula")
+            .Matches(@"[a-z]").WithMessage("Senha deve conter pelo menos uma letra minúscula")
+            .Matches(@"[0-9]").WithMessage("Senha deve conter pelo menos um número")
+            .Matches(@"[@$!%*?&#]").WithMessage("Senha deve conter pelo menos um caractere especial (@$!%*?&#)");
 
         RuleFor(x => x.FullName)
-            .NotEmpty().WithMessage("Full name is required")
-            .Length(3, 100).WithMessage("Full name must be between 3 and 100 characters");
+            .NotEmpty().WithMessage("Nome completo é obrigatório")
+            .Length(3, 100).WithMessage("Nome completo deve ter entre 3 e 100 caracteres");
     }
 }

@@ -25,13 +25,13 @@ public class LoginHandler : IRequestHandler<LoginCommand, AuthResponse>
     public async Task<AuthResponse> Handle(LoginCommand request, CancellationToken cancellationToken)
     {
         var user = await _userRepository.GetByUsernameAsync(request.Username, cancellationToken)
-            ?? throw new UnauthorizedAccessException("Invalid username or password");
+            ?? throw new UnauthorizedAccessException("Nome de usuário ou senha inválidos");
 
         if (!user.IsActive)
-            throw new UnauthorizedAccessException("User account is inactive");
+            throw new UnauthorizedAccessException("Conta de usuário está inativa");
 
         if (!_passwordHasher.VerifyPassword(request.Password, user.PasswordHash))
-            throw new UnauthorizedAccessException("Invalid username or password");
+            throw new UnauthorizedAccessException("Nome de usuário ou senha inválidos");
 
         var roles = await _userRepository.GetUserRolesAsync(user.Id, cancellationToken);
         var roleNames = roles.Select(r => r.Name).ToArray();

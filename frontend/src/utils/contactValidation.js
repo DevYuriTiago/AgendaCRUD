@@ -3,25 +3,25 @@ import * as yup from 'yup'
 export const contactSchema = yup.object({
   name: yup
     .string()
-    .required('Name is required')
-    .min(3, 'Name must be at least 3 characters')
-    .max(100, 'Name must not exceed 100 characters')
+    .required('Nome é obrigatório')
+    .min(3, 'Nome deve ter pelo menos 3 caracteres')
+    .max(100, 'Nome não pode exceder 100 caracteres')
     .trim(),
   
   email: yup
     .string()
-    .required('Email is required')
-    .email('Invalid email format')
-    .max(254, 'Email must not exceed 254 characters')
+    .required('E-mail é obrigatório')
+    .email('Formato de e-mail inválido')
+    .max(254, 'E-mail não pode exceder 254 caracteres')
     .lowercase()
     .trim(),
   
   phone: yup
     .string()
-    .required('Phone is required')
-    .matches(/^\d+$/, 'Phone must contain only digits')
-    .min(8, 'Phone must have at least 8 digits')
-    .max(15, 'Phone must not exceed 15 digits')
+    .required('Telefone é obrigatório')
+    .matches(/^\d+$/, 'Telefone deve conter apenas dígitos')
+    .min(8, 'Telefone deve ter pelo menos 8 dígitos')
+    .max(15, 'Telefone não pode exceder 15 dígitos')
     .transform((value) => value.replace(/\D/g, ''))
 })
 

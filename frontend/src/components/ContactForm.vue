@@ -5,13 +5,13 @@
         <div class="form-field">
           <label for="name" class="form-label">
             <i class="pi pi-user"></i>
-            Name *
+            Nome *
           </label>
           <InputText
             id="name"
             v-model="formData.name"
             :class="{ 'p-invalid': errors.name }"
-            placeholder="Enter full name"
+            placeholder="Digite o nome completo"
             @input="clearFieldError('name')"
           />
           <small v-if="errors.name" class="p-error">{{ errors.name }}</small>
@@ -20,13 +20,13 @@
         <div class="form-field">
           <label for="email" class="form-label">
             <i class="pi pi-envelope"></i>
-            Email *
+            E-mail *
           </label>
           <InputText
             id="email"
             v-model="formData.email"
             :class="{ 'p-invalid': errors.email }"
-            placeholder="email@example.com"
+            placeholder="email@exemplo.com"
             type="email"
             @input="clearFieldError('email')"
           />
@@ -36,7 +36,7 @@
         <div class="form-field">
           <label for="phone" class="form-label">
             <i class="pi pi-phone"></i>
-            Phone *
+            Telefone *
           </label>
           <InputMask
             id="phone"
@@ -52,14 +52,14 @@
 
       <div class="form-actions">
         <Button
-          label="Cancel"
+          label="Cancelar"
           icon="pi pi-times"
           class="p-button-text p-button-secondary"
           type="button"
           @click="handleCancel"
         />
         <Button
-          :label="isEditMode ? 'Update Contact' : 'Create Contact'"
+          :label="isEditMode ? 'Atualizar Contato' : 'Criar Contato'"
           :icon="isEditMode ? 'pi pi-check' : 'pi pi-plus'"
           class="p-button-primary"
           type="submit"
@@ -161,98 +161,157 @@ function clearFieldError(field) {
 <style scoped>
 .contact-form {
   background: white;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 0;
+  padding: 2.5rem;
 }
 
 .form-grid {
   display: grid;
-  gap: 1.5rem;
+  gap: 1.75rem;
   margin-bottom: 2rem;
 }
 
 .form-field {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: 0.625rem;
+  animation: fadeInUp 0.4s ease-out backwards;
+}
+
+.form-field:nth-child(1) { animation-delay: 0.05s; }
+.form-field:nth-child(2) { animation-delay: 0.1s; }
+.form-field:nth-child(3) { animation-delay: 0.15s; }
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .form-label {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-weight: 600;
-  color: #495057;
+  gap: 0.625rem;
+  font-weight: 700;
+  color: #334155;
   font-size: 0.95rem;
+  letter-spacing: 0.2px;
 }
 
 .form-label i {
   color: #667eea;
-  font-size: 0.875rem;
+  font-size: 1rem;
 }
 
 :deep(.p-inputtext),
 :deep(.p-inputmask) {
   width: 100%;
-  padding: 0.75rem 1rem;
-  border: 2px solid #e9ecef;
-  border-radius: 8px;
-  transition: all 0.3s ease;
+  padding: 0.875rem 1rem;
+  border: 2px solid #e2e8f0;
+  border-radius: 12px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-size: 1rem;
+  background: #f8fafc;
 }
 
 :deep(.p-inputtext:hover),
 :deep(.p-inputmask:hover) {
-  border-color: #667eea;
+  border-color: #cbd5e0;
+  background: white;
 }
 
 :deep(.p-inputtext:focus),
 :deep(.p-inputmask:focus) {
   border-color: #667eea;
-  box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12), 0 4px 12px rgba(102, 126, 234, 0.15);
+  background: white;
+  transform: translateY(-1px);
 }
 
 :deep(.p-inputtext.p-invalid),
 :deep(.p-inputmask.p-invalid) {
-  border-color: #e24c4c;
+  border-color: #ef4444;
+  background: #fef2f2;
 }
 
 .p-error {
-  color: #e24c4c;
+  color: #ef4444;
   font-size: 0.875rem;
   margin-top: 0.25rem;
   display: flex;
   align-items: center;
-  gap: 0.25rem;
+  gap: 0.375rem;
+  font-weight: 500;
 }
 
 .form-actions {
   display: flex;
   justify-content: flex-end;
   gap: 1rem;
-  padding-top: 1rem;
-  border-top: 1px solid #e9ecef;
+  padding-top: 1.5rem;
+  border-top: 2px solid #f1f5f9;
+  animation: fadeInUp 0.4s ease-out 0.2s backwards;
 }
 
 :deep(.p-button) {
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  padding: 0.875rem 1.75rem;
+  border-radius: 12px;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1rem;
+}
+
+:deep(.p-button-text) {
+  color: #64748b;
+}
+
+:deep(.p-button-text:hover) {
+  background: #f1f5f9;
+  color: #334155;
 }
 
 :deep(.p-button-primary) {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   border: none;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+:deep(.p-button-primary::before) {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s;
+}
+
+:deep(.p-button-primary:hover::before) {
+  left: 100%;
 }
 
 :deep(.p-button-primary:hover) {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+}
+
+:deep(.p-button-primary:active) {
+  transform: translateY(0);
 }
 
 @media (max-width: 768px) {
+  .contact-form {
+    padding: 1.5rem;
+  }
+
   .form-actions {
     flex-direction: column-reverse;
   }

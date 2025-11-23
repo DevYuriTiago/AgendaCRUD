@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.0.31903.59
@@ -16,6 +16,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactAgenda.Api", "src\Api\ContactAgenda.Api.csproj", "{A4444444-4444-4444-4444-444444444444}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactAgenda.Application.Tests", "tests\Application.Tests\ContactAgenda.Application.Tests.csproj", "{B1111111-1111-1111-1111-111111111111}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactAgenda.Integration.Tests", "tests\Integration.Tests\ContactAgenda.Integration.Tests.csproj", "{7F0F2612-97F1-4A6B-92C8-1686067C0419}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{B1111111-1111-1111-1111-111111111111}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B1111111-1111-1111-1111-111111111111}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B1111111-1111-1111-1111-111111111111}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0F2612-97F1-4A6B-92C8-1686067C0419}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0F2612-97F1-4A6B-92C8-1686067C0419}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0F2612-97F1-4A6B-92C8-1686067C0419}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0F2612-97F1-4A6B-92C8-1686067C0419}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A1111111-1111-1111-1111-111111111111} = {8E0B4E3C-1E3D-4F5A-9E3D-5F5F5F5F5F5F}
@@ -50,5 +56,6 @@ Global
 		{A3333333-3333-3333-3333-333333333333} = {8E0B4E3C-1E3D-4F5A-9E3D-5F5F5F5F5F5F}
 		{A4444444-4444-4444-4444-444444444444} = {8E0B4E3C-1E3D-4F5A-9E3D-5F5F5F5F5F5F}
 		{B1111111-1111-1111-1111-111111111111} = {9E0B4E3C-1E3D-4F5A-9E3D-5F5F5F5F5F5F}
+		{7F0F2612-97F1-4A6B-92C8-1686067C0419} = {9E0B4E3C-1E3D-4F5A-9E3D-5F5F5F5F5F5F}
 	EndGlobalSection
 EndGlobal

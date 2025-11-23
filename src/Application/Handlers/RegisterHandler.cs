@@ -28,17 +28,17 @@ public class RegisterHandler : IRequestHandler<RegisterCommand, AuthResponse>
     public async Task<AuthResponse> Handle(RegisterCommand request, CancellationToken cancellationToken)
     {
         if (await _userRepository.UsernameExistsAsync(request.Username, cancellationToken))
-            throw new ArgumentException("Username already exists");
+            throw new ArgumentException("Nome de usuário já existe");
 
         if (await _userRepository.EmailExistsAsync(request.Email, cancellationToken))
-            throw new ArgumentException("Email already exists");
+            throw new ArgumentException("E-mail já existe");
 
         var passwordHash = _passwordHasher.HashPassword(request.Password);
         var user = User.Create(request.Username, request.Email, passwordHash, request.FullName);
         await _userRepository.AddAsync(user, cancellationToken);
 
         var userRole = await _roleRepository.GetByNameAsync(Role.Names.User, cancellationToken) 
-            ?? throw new InvalidOperationException("Default role not found");
+            ?? throw new InvalidOperationException("Função padrão não encontrada");
         
         var userRoleEntity = UserRole.Create(user.Id, userRole.Id);
         await _userRepository.AddUserRoleAsync(userRoleEntity, cancellationToken);

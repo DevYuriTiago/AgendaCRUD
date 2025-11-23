@@ -23,14 +23,14 @@ public class RefreshTokenHandler : IRequestHandler<RefreshTokenCommand, AuthResp
     public async Task<AuthResponse> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
         var refreshToken = await _refreshTokenRepository.GetByTokenAsync(request.RefreshToken, cancellationToken)
-            ?? throw new UnauthorizedAccessException("Invalid refresh token");
+            ?? throw new UnauthorizedAccessException("Token de atualização inválido");
 
         if (!refreshToken.IsActive)
-            throw new UnauthorizedAccessException("Refresh token is not active");
+            throw new UnauthorizedAccessException("Token de atualização não está ativo");
 
         var user = refreshToken.User;
         if (!user.IsActive)
-            throw new UnauthorizedAccessException("User account is inactive");
+            throw new UnauthorizedAccessException("Conta de usuário está inativa");
 
         // Revoke old token
         refreshToken.Revoke(request.IpAddress);

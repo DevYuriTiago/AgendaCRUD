@@ -22,9 +22,7 @@ Log.Logger = new LoggerConfiguration()
     .Enrich.WithThreadId()
     .CreateLogger();
 
-try
-{
-    Log.Information("Starting Contact Agenda API");
+Log.Information("Starting Contact Agenda API");
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -100,31 +98,39 @@ builder.Services.AddCors(options =>
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 builder.Services.Configure<JwtSettings>(jwtSettings);
 
-// JWT Authentication
-var secret = jwtSettings.Get<JwtSettings>()?.Secret ?? throw new InvalidOperationException("JWT Secret not configured");
-var key = Encoding.UTF8.GetBytes(secret);
-
-builder.Services.AddAuthentication(options =>
+// JWT Authentication - only configure if secret exists
+var secret = builder.Configuration["JwtSettings:Secret"];
+if (!string.IsNullOrEmpty(secret))
 {
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-.AddJwtBearer(options =>
-{
-    options.RequireHttpsMetadata = false;
-    options.SaveToken = true;
-    options.TokenValidationParameters = new TokenValidationParameters
+    var key = Encoding.UTF8.GetBytes(secret);
+    
+    builder.Services.AddAuthentication(options =>
     {
-        ValidateIssuerSigningKey = true,
-        IssuerSigningKey = new SymmetricSecurityKey(key),
-        ValidateIssuer = true,
-        ValidIssuer = jwtSettings.Get<JwtSettings>()?.Issuer,
-        ValidateAudience = true,
-        ValidAudience = jwtSettings.Get<JwtSettings>()?.Audience,
-        ValidateLifetime = true,
-        ClockSkew = TimeSpan.Zero
-    };
-});
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
+    .AddJwtBearer(options =>
+    {
+        options.RequireHttpsMetadata = false;
+        options.SaveToken = true;
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ValidateIssuer = true,
+            ValidIssuer = jwtSettings.Get<JwtSettings>()?.Issuer,
+            ValidateAudience = true,
+            ValidAudience = jwtSettings.Get<JwtSettings>()?.Audience,
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+}
+else
+{
+    // For testing environments without JWT configured
+    builder.Services.AddAuthentication();
+}
 
 builder.Services.AddAuthorization();
 
@@ -181,17 +187,8 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-    Log.Information("Contact Agenda API started successfully");
-    app.Run();
-}
-catch (Exception ex)
-{
-    Log.Fatal(ex, "Application terminated unexpectedly");
-}
-finally
-{
-    Log.CloseAndFlush();
-}
+Log.Information("Contact Agenda API started successfully");
+app.Run();
 
 // Make Program class visible for testing
 public partial class Program { }

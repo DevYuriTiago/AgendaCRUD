@@ -17,7 +17,7 @@ public abstract class DomainException : Exception
 public class ContactNotFoundException : DomainException
 {
     public ContactNotFoundException(Guid id) 
-        : base($"Contact with ID '{id}' was not found") { }
+        : base($"Contato com ID '{id}' não foi encontrado") { }
 }
 
 /// <summary>
@@ -26,5 +26,5 @@ public class ContactNotFoundException : DomainException
 public class DuplicateEmailException : DomainException
 {
     public DuplicateEmailException(string email) 
-        : base($"Contact with email '{email}' already exists") { }
+        : base($"Contato com e-mail '{email}' já existe") { }
 }

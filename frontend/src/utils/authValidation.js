@@ -3,38 +3,38 @@ import * as yup from 'yup'
 export const loginSchema = yup.object({
   username: yup
     .string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters'),
+    .required('Nome de usuário é obrigatório')
+    .min(3, 'Nome de usuário deve ter pelo menos 3 caracteres'),
   password: yup
     .string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters')
+    .required('Senha é obrigatória')
+    .min(6, 'Senha deve ter pelo menos 6 caracteres')
 })
 
 export const registerSchema = yup.object({
   username: yup
     .string()
-    .required('Username is required')
-    .min(3, 'Username must be at least 3 characters')
-    .max(50, 'Username must not exceed 50 characters')
-    .matches(/^[a-zA-Z0-9_.-]+$/, 'Username can only contain letters, numbers, dots, hyphens and underscores'),
+    .required('Nome de usuário é obrigatório')
+    .min(3, 'Nome de usuário deve ter pelo menos 3 caracteres')
+    .max(50, 'Nome de usuário não pode exceder 50 caracteres')
+    .matches(/^[a-zA-Z0-9_.-]+$/, 'Nome de usuário pode conter apenas letras, números, pontos, hífens e sublinhados'),
   email: yup
     .string()
-    .required('Email is required')
-    .email('Must be a valid email')
-    .max(254, 'Email must not exceed 254 characters'),
+    .required('E-mail é obrigatório')
+    .email('Deve ser um e-mail válido')
+    .max(254, 'E-mail não pode exceder 254 caracteres'),
   password: yup
     .string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters')
-    .max(100, 'Password must not exceed 100 characters'),
+    .required('Senha é obrigatória')
+    .min(6, 'Senha deve ter pelo menos 6 caracteres')
+    .max(100, 'Senha não pode exceder 100 caracteres'),
   confirmPassword: yup
     .string()
-    .required('Please confirm your password')
-    .oneOf([yup.ref('password')], 'Passwords must match'),
+    .required('Por favor confirme sua senha')
+    .oneOf([yup.ref('password')], 'As senhas devem coincidir'),
   fullName: yup
     .string()
-    .required('Full name is required')
-    .min(3, 'Full name must be at least 3 characters')
-    .max(100, 'Full name must not exceed 100 characters')
+    .required('Nome completo é obrigatório')
+    .min(3, 'Nome completo deve ter pelo menos 3 caracteres')
+    .max(100, 'Nome completo não pode exceder 100 caracteres')
 })
