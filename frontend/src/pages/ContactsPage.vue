@@ -270,16 +270,29 @@ async function handleDelete(contactId) {
 :deep(.contact-dialog .p-dialog-header) {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 2rem 2.5rem;
+  padding: 2rem 2.5rem !important;
   border-radius: 0;
   border-bottom: none;
+  min-height: 90px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1.5rem !important;
+}
+
+:deep(.contact-dialog .p-dialog-header .p-dialog-header-icons) {
+  margin: 0 !important;
+  padding: 0 !important;
 }
 
 :deep(.contact-dialog .p-dialog-title) {
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.3px;
-  line-height: 1.3;
+  line-height: 1.4;
+  padding: 0.5rem 1rem 0.5rem 0.5rem !important;
+  margin: 0 !important;
+  flex: 1;
 }
 
 :deep(.contact-dialog .p-dialog-header-icon) {
