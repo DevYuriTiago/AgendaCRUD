@@ -420,4 +420,100 @@ const handleSubmit = async () => {
 :deep(.p-password-input) {
   width: 100%;
 }
+
+/* Responsividade completa */
+@media (max-width: 768px) {
+  .register-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .register-card {
+    padding: 2.5rem 2rem;
+    max-width: 100%;
+  }
+
+  .register-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .register-header i {
+    font-size: 2.5rem !important;
+  }
+
+  .register-form {
+    gap: 1.15rem;
+  }
+
+  .register-button {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .register-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .register-card {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+
+  .register-header {
+    margin-bottom: 2rem;
+  }
+
+  .register-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .register-header i {
+    font-size: 2.25rem !important;
+  }
+
+  .register-header p {
+    font-size: 0.9rem;
+  }
+
+  .register-form {
+    gap: 1rem;
+  }
+
+  .field label {
+    font-size: 0.875rem;
+  }
+
+  :deep(.p-inputtext),
+  :deep(.p-password-input) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.95rem;
+  }
+
+  .register-button {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+    margin-top: 0.75rem;
+  }
+
+  .login-link {
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .register-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .register-header h1 {
+    font-size: 1.35rem;
+  }
+
+  .register-form {
+    gap: 0.875rem;
+  }
+}
 </style>

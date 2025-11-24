@@ -344,4 +344,91 @@ const handleSubmit = async () => {
 :deep(.p-password-input) {
   width: 100%;
 }
+
+/* Responsividade completa */
+@media (max-width: 768px) {
+  .login-container {
+    padding: 2rem 1.5rem;
+  }
+
+  .login-card {
+    padding: 2.5rem 2rem;
+    max-width: 100%;
+  }
+
+  .login-header h1 {
+    font-size: 1.75rem;
+  }
+
+  .login-header i {
+    font-size: 2.5rem !important;
+  }
+
+  .login-form {
+    gap: 1.25rem;
+  }
+
+  .login-button {
+    padding: 0.875rem;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 1.5rem 1rem;
+  }
+
+  .login-card {
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+  }
+
+  .login-header {
+    margin-bottom: 2rem;
+  }
+
+  .login-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .login-header i {
+    font-size: 2.25rem !important;
+  }
+
+  .login-header p {
+    font-size: 0.9rem;
+  }
+
+  .field label {
+    font-size: 0.875rem;
+  }
+
+  :deep(.p-inputtext),
+  :deep(.p-password-input) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.95rem;
+  }
+
+  .login-button {
+    padding: 0.75rem;
+    font-size: 0.95rem;
+  }
+
+  .register-link {
+    font-size: 0.875rem;
+    margin-top: 1.25rem;
+    padding-top: 1.25rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .login-card {
+    padding: 1.5rem 1.25rem;
+  }
+
+  .login-header h1 {
+    font-size: 1.35rem;
+  }
+}
 </style>

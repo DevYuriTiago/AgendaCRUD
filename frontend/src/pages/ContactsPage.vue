@@ -301,13 +301,19 @@ async function handleDelete(contactId) {
 }
 
 @media (max-width: 768px) {
+  .contacts-page {
+    padding: 1rem;
+  }
+
   .page-header {
     padding: 1.5rem;
+    margin-bottom: 1.5rem;
   }
 
   .header-content {
     flex-direction: column;
     align-items: stretch;
+    gap: 1.5rem;
   }
 
   .create-button {
@@ -316,11 +322,56 @@ async function handleDelete(contactId) {
   }
 
   .page-title {
-    font-size: 1.5rem;
+    font-size: 1.75rem;
+  }
+
+  .page-subtitle {
+    font-size: 1rem;
   }
 
   :deep(.contact-dialog) {
     width: 95vw !important;
+    max-width: 95vw !important;
+  }
+
+  :deep(.contact-dialog .p-dialog-header) {
+    padding: 1.25rem 1.5rem;
+  }
+
+  :deep(.contact-dialog .p-dialog-title) {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contacts-page {
+    padding: 0.75rem;
+  }
+
+  .page-header {
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+
+  .page-subtitle {
+    font-size: 0.9rem;
+  }
+
+  .create-button {
+    padding: 0.875rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  :deep(.contact-dialog .p-dialog-header) {
+    padding: 1rem 1.25rem;
+  }
+
+  :deep(.contact-dialog .p-dialog-title) {
+    font-size: 1.1rem;
   }
 }
 </style>

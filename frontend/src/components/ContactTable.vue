@@ -518,4 +518,131 @@ function formatDate(dateString) {
 :deep(.p-paginator .p-dropdown .p-dropdown-trigger) {
   color: #667eea;
 }
+
+/* Responsividade completa */
+@media (max-width: 768px) {
+  .table-header {
+    flex-direction: column;
+    padding: 1.5rem;
+    gap: 1rem;
+  }
+
+  .table-title {
+    font-size: 1.35rem;
+  }
+
+  .search-box {
+    max-width: 100%;
+    width: 100%;
+  }
+
+  .name-cell {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .contact-avatar {
+    font-size: 0.9rem;
+    width: 2rem;
+    height: 2rem;
+  }
+
+  .contact-name {
+    font-size: 0.9rem;
+  }
+
+  .email-cell,
+  .phone-cell {
+    font-size: 0.85rem;
+    gap: 0.5rem;
+  }
+
+  .action-buttons {
+    gap: 0.5rem;
+  }
+
+  .action-edit,
+  .action-delete {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  :deep(.p-datatable .p-datatable-thead > tr > th) {
+    padding: 1rem 0.75rem;
+    font-size: 0.85rem;
+  }
+
+  :deep(.p-datatable .p-datatable-tbody > tr > td) {
+    padding: 1rem 0.75rem;
+  }
+
+  :deep(.p-datatable .p-datatable-tbody > tr:hover) {
+    transform: none;
+  }
+
+  :deep(.p-paginator) {
+    flex-wrap: wrap;
+    padding: 1rem;
+    gap: 0.75rem;
+  }
+
+  :deep(.p-paginator .p-paginator-first),
+  :deep(.p-paginator .p-paginator-prev),
+  :deep(.p-paginator .p-paginator-next),
+  :deep(.p-paginator .p-paginator-last) {
+    min-width: 2.5rem;
+    height: 2.5rem;
+  }
+
+  :deep(.p-paginator .p-paginator-pages .p-paginator-page) {
+    min-width: 2.5rem;
+    height: 2.5rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .contacts-page {
+    padding: 1rem;
+  }
+
+  .table-title {
+    font-size: 1.2rem;
+  }
+
+  .search-input {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem 0.75rem 2.5rem;
+  }
+
+  .empty-state {
+    padding: 3rem 1rem;
+  }
+
+  .empty-icon {
+    font-size: 3.5rem;
+  }
+
+  :deep(.p-tag) {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .action-edit,
+  .action-delete {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  :deep(.p-datatable .p-datatable-thead > tr > th) {
+    font-size: 0.75rem;
+    padding: 0.75rem 0.5rem;
+  }
+
+  :deep(.p-datatable .p-datatable-tbody > tr > td) {
+    padding: 0.75rem 0.5rem;
+    font-size: 0.85rem;
+  }
+}
 </style>

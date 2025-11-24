@@ -312,12 +312,48 @@ function clearFieldError(field) {
     padding: 1.5rem;
   }
 
+  .form-grid {
+    gap: 1.5rem;
+  }
+
   .form-actions {
     flex-direction: column-reverse;
+    gap: 0.875rem;
   }
 
   :deep(.p-button) {
     width: 100%;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .contact-form {
+    padding: 1.25rem;
+  }
+
+  .form-grid {
+    gap: 1.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-label {
+    font-size: 0.875rem;
+  }
+
+  :deep(.p-inputtext),
+  :deep(.p-inputmask) {
+    padding: 0.75rem 0.875rem;
+    font-size: 0.95rem;
+  }
+
+  :deep(.p-button) {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+
+  .form-actions {
+    padding-top: 1.25rem;
   }
 }
 </style>
