@@ -17,7 +17,7 @@
     
     <div class="relative flex min-h-screen flex-col">
       <header v-if="authStore.isAuthenticated" class="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-        <div class="container flex h-14 max-w-screen-2xl items-center">
+        <div class="flex h-14 w-full items-center px-8">
           <div class="mr-4 flex">
             <a class="mr-6 flex items-center space-x-2" href="/">
               <i class="pi pi-users text-primary"></i>
