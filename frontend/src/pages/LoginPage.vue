@@ -48,6 +48,10 @@
         </div>
       </form>
     </div>
+
+    <footer class="page-footer">
+      <p>Agenda de Contatos. Feito com .NET + VUE</p>
+    </footer>
   </div>
 </template>
 
@@ -429,6 +433,39 @@ const handleSubmit = async () => {
 
   .login-header h1 {
     font-size: 1.35rem;
+  }
+}
+
+.page-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+  font-size: 0.95rem;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.page-footer p {
+  margin: 0;
+}
+
+@media (max-width: 768px) {
+  .page-footer {
+    position: relative;
+    padding: 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-footer {
+    padding: 1rem;
+    font-size: 0.8rem;
   }
 }
 </style>

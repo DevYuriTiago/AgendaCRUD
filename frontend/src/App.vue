@@ -41,7 +41,7 @@
 
       <footer v-if="authStore.isAuthenticated" class="app-footer">
         <div class="container">
-          <p>&copy; 2025 Agenda de Contatos. Feito com Vue 3 + PrimeVue</p>
+          <p>Agenda de Contatos. Feito com .NET + VUE</p>
         </div>
       </footer>
     </div>
