@@ -150,13 +150,16 @@ if (app.Environment.IsDevelopment())
         c.RoutePrefix = string.Empty; // Swagger at root
     });
 
-    // Auto-migrate database in development
+    // Auto-migrate database in development (skip for InMemory databases in tests)
     using var scope = app.Services.CreateScope();
     var dbContext = scope.ServiceProvider.GetRequiredService<ContactAgendaDbContext>();
-    dbContext.Database.Migrate();
+    if (dbContext.Database.IsRelational())
+    {
+        dbContext.Database.Migrate();
+    }
 }
 
-// Global exception handler
+// Global exception handler - always enabled for proper error responses
 app.UseMiddleware<GlobalExceptionHandlerMiddleware>();
 
 // Add Serilog request logging

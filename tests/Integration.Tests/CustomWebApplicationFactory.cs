@@ -11,22 +11,6 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.UseEnvironment("Testing");
-
-        // Configure test appsettings - add test config to override defaults
-        builder.ConfigureAppConfiguration((context, config) =>
-        {
-            // Add test configuration - last source wins
-            config.AddInMemoryCollection(new Dictionary<string, string?>
-            {
-                ["JwtSettings:Secret"] = "MyTestSecretKeyThatIsLongEnoughFor256BitsEncryption12345",
-                ["JwtSettings:Issuer"] = "ContactAgendaTest",
-                ["JwtSettings:Audience"] = "ContactAgendaTestUsers",
-                ["JwtSettings:ExpirationMinutes"] = "60",
-                ["JwtSettings:RefreshTokenExpirationDays"] = "7"
-            });
-        });
-
         builder.ConfigureServices(services =>
         {
             // Remove the existing DbContext registration
@@ -42,18 +26,40 @@ public class CustomWebApplicationFactory : WebApplicationFactory<Program>
             services.AddDbContext<ContactAgendaDbContext>(options =>
             {
                 options.UseInMemoryDatabase("TestDb");
+                options.EnableSensitiveDataLogging();
             });
 
-            // Build the service provider
-            var serviceProvider = services.BuildServiceProvider();
-
-            // Create a scope to obtain a reference to the database context
-            using var scope = serviceProvider.CreateScope();
-            var scopedServices = scope.ServiceProvider;
-            var db = scopedServices.GetRequiredService<ContactAgendaDbContext>();
-
-            // Ensure the database is created
+            // Build service provider and seed database
+            var sp = services.BuildServiceProvider();
+            using var scope = sp.CreateScope();
+            var db = scope.ServiceProvider.GetRequiredService<ContactAgendaDbContext>();
+            
             db.Database.EnsureCreated();
+            SeedDatabase(db);
         });
     }
+
+    private static bool _seeded = false;
+    private static readonly object _lock = new object();
+
+    private static void SeedDatabase(ContactAgendaDbContext context)
+    {
+        lock (_lock)
+        {
+            if (_seeded) return;
+
+            if (!context.Roles.Any())
+            {
+                var adminRole = Domain.Entities.Role.Create("Admin", "Full system access");
+                var userRole = Domain.Entities.Role.Create("User", "Regular user access");
+                var guestRole = Domain.Entities.Role.Create("Guest", "Read-only access");
+
+                context.Roles.AddRange(adminRole, userRole, guestRole);
+                context.SaveChanges();
+            }
+
+            _seeded = true;
+        }
+    }
 }
+

@@ -41,6 +41,16 @@ public class GlobalExceptionHandlerMiddleware
 
         switch (exception)
         {
+            case FluentValidation.ValidationException validationEx:
+                statusCode = HttpStatusCode.BadRequest;
+                message = "Falha na validação";
+                errors = validationEx.Errors
+                    .GroupBy(e => e.PropertyName)
+                    .ToDictionary(
+                        g => g.Key,
+                        g => g.Select(e => e.ErrorMessage).ToArray());
+                break;
+
             case ContactNotFoundException:
                 statusCode = HttpStatusCode.NotFound;
                 message = exception.Message;
@@ -48,6 +58,11 @@ public class GlobalExceptionHandlerMiddleware
 
             case DuplicateEmailException:
                 statusCode = HttpStatusCode.Conflict;
+                message = exception.Message;
+                break;
+
+            case UnauthorizedAccessException:
+                statusCode = HttpStatusCode.Unauthorized;
                 message = exception.Message;
                 break;
 

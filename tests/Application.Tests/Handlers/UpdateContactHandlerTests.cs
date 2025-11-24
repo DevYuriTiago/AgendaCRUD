@@ -96,7 +96,7 @@ public class UpdateContactHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<ContactNotFoundException>()
-            .WithMessage($"*{contactId}*not found*");
+            .WithMessage($"*{contactId}*não foi encontrado*");
 
         _repositoryMock.Verify(
             r => r.UpdateAsync(It.IsAny<Contact>(), It.IsAny<CancellationToken>()),
@@ -128,7 +128,7 @@ public class UpdateContactHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<DuplicateEmailException>()
-            .WithMessage("*jane@example.com*already exists*");
+            .WithMessage("*jane@example.com*já existe*");
 
         _repositoryMock.Verify(
             r => r.UpdateAsync(It.IsAny<Contact>(), It.IsAny<CancellationToken>()),

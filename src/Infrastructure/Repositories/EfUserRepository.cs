@@ -30,54 +30,40 @@ public class EfUserRepository : IUserRepository
     {
         var normalizedUsername = username.Trim().ToLowerInvariant();
         
+        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
         return await _context.Users
-            .FromSqlRaw("SELECT * FROM Users WHERE Username = {0}", normalizedUsername)
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(u => u.Username.ToLower() == normalizedUsername, cancellationToken);
     }
 
     public async Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         
+        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
         return await _context.Users
-            .FromSqlRaw("SELECT * FROM Users WHERE Email = {0}", normalizedEmail)
             .Include(u => u.UserRoles)
             .ThenInclude(ur => ur.Role)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(u => u.Email.ToLower() == normalizedEmail, cancellationToken);
     }
 
     public async Task<bool> UsernameExistsAsync(string username, CancellationToken cancellationToken = default)
     {
         var normalizedUsername = username.Trim().ToLowerInvariant();
         
-        var connection = _context.Database.GetDbConnection();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(1) FROM Users WHERE Username = @username";
-        command.Parameters.Add(new SqlParameter("@username", normalizedUsername));
-        
-        if (connection.State != System.Data.ConnectionState.Open)
-            await connection.OpenAsync(cancellationToken);
-        
-        var result = await command.ExecuteScalarAsync(cancellationToken);
-        return Convert.ToInt32(result) > 0;
+        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
+        return await _context.Users
+            .AnyAsync(u => u.Username.ToLower() == normalizedUsername, cancellationToken);
     }
 
     public async Task<bool> EmailExistsAsync(string email, CancellationToken cancellationToken = default)
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         
-        var connection = _context.Database.GetDbConnection();
-        await using var command = connection.CreateCommand();
-        command.CommandText = "SELECT COUNT(1) FROM Users WHERE Email = @email";
-        command.Parameters.Add(new SqlParameter("@email", normalizedEmail));
-        
-        if (connection.State != System.Data.ConnectionState.Open)
-            await connection.OpenAsync(cancellationToken);
-        
-        var result = await command.ExecuteScalarAsync(cancellationToken);
-        return Convert.ToInt32(result) > 0;
+        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
+        return await _context.Users
+            .AnyAsync(u => u.Email.ToLower() == normalizedEmail, cancellationToken);
     }
 
     public async Task AddAsync(User user, CancellationToken cancellationToken = default)

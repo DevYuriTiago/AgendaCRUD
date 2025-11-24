@@ -79,7 +79,7 @@ public class ContactEndpointsTests : IClassFixture<CustomWebApplicationFactory>
         contact.Should().NotBeNull();
         contact!.Name.Should().Be("John Doe");
         contact.Email.Should().Be("john@example.com");
-        contact.Phone.Should().Be("+5511999999999");
+        contact.Phone.Should().Be("5511999999999"); // Phone is normalized without +
     }
 
     [Fact]

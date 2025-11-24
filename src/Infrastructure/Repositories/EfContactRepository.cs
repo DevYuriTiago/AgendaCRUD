@@ -40,27 +40,18 @@ public class EfContactRepository : IContactRepository
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         
-        // Use raw SQL with SqlParameter to avoid EF Core value conversion issues
-        var connection = _context.Database.GetDbConnection();
-        await using var command = connection.CreateCommand();
-        
+        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
+        // Email is a Value Object, so we compare with .Value
         if (excludeContactId.HasValue)
         {
-            command.CommandText = "SELECT COUNT(1) FROM Contacts WHERE Email = @email AND Id != @excludeId";
-            command.Parameters.Add(new SqlParameter("@email", normalizedEmail));
-            command.Parameters.Add(new SqlParameter("@excludeId", excludeContactId.Value));
+            return await _context.Contacts
+                .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail && c.Id != excludeContactId.Value, cancellationToken);
         }
         else
         {
-            command.CommandText = "SELECT COUNT(1) FROM Contacts WHERE Email = @email";
-            command.Parameters.Add(new SqlParameter("@email", normalizedEmail));
+            return await _context.Contacts
+                .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail, cancellationToken);
         }
-        
-        if (connection.State != System.Data.ConnectionState.Open)
-            await connection.OpenAsync(cancellationToken);
-        
-        var result = await command.ExecuteScalarAsync(cancellationToken);
-        return Convert.ToInt32(result) > 0;
     }
 
     public async Task AddAsync(Contact contact, CancellationToken cancellationToken = default)

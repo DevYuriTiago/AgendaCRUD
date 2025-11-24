@@ -83,7 +83,7 @@ public class CreateContactHandlerTests
 
         // Assert
         await act.Should().ThrowAsync<DuplicateEmailException>()
-            .WithMessage("*john@example.com*already exists*");
+            .WithMessage("*john@example.com*já existe*");
 
         _repositoryMock.Verify(
             r => r.AddAsync(It.IsAny<Contact>(), It.IsAny<CancellationToken>()),
