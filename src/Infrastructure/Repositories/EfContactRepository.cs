@@ -40,17 +40,37 @@ public class EfContactRepository : IContactRepository
     {
         var normalizedEmail = email.Trim().ToLowerInvariant();
         
-        // Use EF Core LINQ instead of raw SQL for compatibility with InMemoryDatabase
-        // Email is a Value Object, so we compare with .Value
-        if (excludeContactId.HasValue)
+        // For SQL Server: Use raw SQL because EF Core cannot translate Value Object properties
+        // For InMemory (tests): Use LINQ which works fine
+        if (_context.Database.IsRelational())
         {
-            return await _context.Contacts
-                .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail && c.Id != excludeContactId.Value, cancellationToken);
+            // Raw SQL for production (SQL Server)
+            if (excludeContactId.HasValue)
+            {
+                return await _context.Contacts
+                    .FromSqlRaw("SELECT * FROM Contacts WHERE LOWER(Email) = {0} AND Id != {1}", normalizedEmail, excludeContactId.Value)
+                    .AnyAsync(cancellationToken);
+            }
+            else
+            {
+                return await _context.Contacts
+                    .FromSqlRaw("SELECT * FROM Contacts WHERE LOWER(Email) = {0}", normalizedEmail)
+                    .AnyAsync(cancellationToken);
+            }
         }
         else
         {
-            return await _context.Contacts
-                .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail, cancellationToken);
+            // LINQ for InMemory (tests)
+            if (excludeContactId.HasValue)
+            {
+                return await _context.Contacts
+                    .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail && c.Id != excludeContactId.Value, cancellationToken);
+            }
+            else
+            {
+                return await _context.Contacts
+                    .AnyAsync(c => c.Email.Value.ToLower() == normalizedEmail, cancellationToken);
+            }
         }
     }
 
