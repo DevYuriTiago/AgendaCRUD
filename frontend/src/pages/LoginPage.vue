@@ -1,27 +1,36 @@
 <template>
-  <div class="login-container">
-    <div class="login-card">
-      <div class="login-header">
-        <i class="pi pi-users" style="font-size: 3rem"></i>
-        <h1>Agenda de Contatos</h1>
-        <p>Entre para gerenciar seus contatos</p>
+  <div class="relative flex min-h-screen w-full items-center justify-center overflow-hidden bg-background">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div class="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
+    </div>
+
+    <MagicCard class="relative z-10 w-full max-w-md border-border/50 bg-card/50 backdrop-blur-xl">
+      <div class="flex flex-col items-center space-y-2 text-center mb-8">
+        <div class="rounded-full bg-primary/10 p-4 mb-2">
+          <i class="pi pi-users text-3xl text-primary"></i>
+        </div>
+        <h1 class="text-2xl font-bold tracking-tight">Agenda de Contatos</h1>
+        <p class="text-sm text-muted-foreground">Entre para gerenciar seus contatos</p>
       </div>
 
-      <form @submit.prevent="handleSubmit" class="login-form">
-        <div class="field">
-          <label for="username">Nome de Usuário</label>
+      <form @submit.prevent="handleSubmit" class="space-y-4">
+        <div class="space-y-2">
+          <label for="username" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Nome de Usuário</label>
           <InputText
             id="username"
             v-model="formData.username"
             placeholder="Digite seu nome de usuário"
             :class="{ 'p-invalid': errors.username }"
+            class="w-full"
             @blur="validateField('username')"
           />
-          <small v-if="errors.username" class="p-error">{{ errors.username }}</small>
+          <small v-if="errors.username" class="text-destructive text-xs">{{ errors.username }}</small>
         </div>
 
-        <div class="field">
-          <label for="password">Senha</label>
+        <div class="space-y-2">
+          <label for="password" class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Senha</label>
           <Password
             id="password"
             v-model="formData.password"
@@ -29,9 +38,11 @@
             :feedback="false"
             toggleMask
             :class="{ 'p-invalid': errors.password }"
+            inputClass="w-full"
+            class="w-full"
             @blur="validateField('password')"
           />
-          <small v-if="errors.password" class="p-error">{{ errors.password }}</small>
+          <small v-if="errors.password" class="text-destructive text-xs">{{ errors.password }}</small>
         </div>
 
         <Button
@@ -39,17 +50,17 @@
           label="Entrar"
           icon="pi pi-sign-in"
           :loading="loading"
-          class="w-full login-button"
+          class="w-full mt-6"
         />
 
-        <div class="register-link">
+        <div class="text-center text-sm text-muted-foreground mt-4">
           Não tem uma conta?
-          <router-link to="/register">Cadastre-se aqui</router-link>
+          <router-link to="/register" class="font-medium text-primary hover:underline">Cadastre-se aqui</router-link>
         </div>
       </form>
-    </div>
+    </MagicCard>
 
-    <footer class="page-footer">
+    <footer class="absolute bottom-4 text-center text-xs text-muted-foreground">
       <p>Agenda de Contatos. Feito com .NET + VUE</p>
     </footer>
   </div>
@@ -64,6 +75,7 @@ import { loginSchema } from '../utils/authValidation'
 import InputText from 'primevue/inputtext'
 import Password from 'primevue/password'
 import Button from 'primevue/button'
+import MagicCard from '@/components/ui/MagicCard.vue'
 
 const router = useRouter()
 const toast = useToast()
@@ -110,9 +122,9 @@ const handleSubmit = async () => {
     } else {
       toast.add({
         severity: 'error',
-        summary: 'Falha no Login',
-        detail: err.response?.data?.message || 'Nome de usuário ou senha inválidos',
-        life: 5000
+        summary: 'Erro no login',
+        detail: err.message || 'Verifique suas credenciais',
+        life: 3000
       })
     }
   } finally {
@@ -122,350 +134,19 @@ const handleSubmit = async () => {
 </script>
 
 <style scoped>
-.login-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.login-container::before {
-  content: '';
-  position: absolute;
-  width: 300px;
-  height: 300px;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  top: -100px;
-  left: -100px;
-  animation: float 6s ease-in-out infinite;
-}
-
-.login-container::after {
-  content: '';
-  position: absolute;
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  bottom: -150px;
-  right: -150px;
-  animation: float 8s ease-in-out infinite reverse;
-}
-
-@keyframes float {
-  0%, 100% { transform: translate(0, 0); }
-  50% { transform: translate(30px, 30px); }
-}
-
-.login-card {
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(20px);
-  border-radius: 24px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  padding: 3rem;
-  width: 100%;
-  max-width: 450px;
-  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  z-index: 1;
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(40px) scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.login-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
-}
-
-.login-header i {
-  color: #667eea;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-}
-
-.login-header h1 {
-  font-size: 2rem;
-  margin: 0.5rem 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-}
-
-.login-header p {
-  color: #718096;
-  margin: 0;
-  font-weight: 500;
-}
-
-.login-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.field label {
-  font-weight: 600;
-  color: #2d3748;
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
-}
-
+/* Removed custom styles in favor of Tailwind */
 :deep(.p-inputtext),
 :deep(.p-password-input) {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f8fafc;
+  @apply bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500;
 }
 
 :deep(.p-inputtext:hover),
 :deep(.p-password-input:hover) {
-  border-color: #cbd5e0;
-  background: #fff;
+  @apply bg-slate-800 border-slate-600;
 }
 
 :deep(.p-inputtext:focus),
 :deep(.p-password-input:focus) {
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12), 0 4px 12px rgba(102, 126, 234, 0.15);
-  background: #fff;
-  transform: translateY(-1px);
-}
-
-.login-button {
-  margin-top: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.login-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.login-button:hover::before {
-  left: 100%;
-}
-
-.login-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
-}
-
-.login-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
-}
-
-.register-link {
-  text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  color: #718096;
-  font-size: 0.95rem;
-}
-
-.register-link a {
-  color: #667eea;
-  text-decoration: none;
-  font-weight: 600;
-  transition: all 0.2s ease;
-  position: relative;
-  padding-bottom: 2px;
-}
-
-.register-link a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  transition: width 0.3s ease;
-}
-
-.register-link a:hover::after {
-  width: 100%;
-}
-
-.register-link a:hover {
-  color: #764ba2;
-}
-
-.p-error {
-  color: #ef4444;
-  font-size: 0.875rem;
-}
-
-:deep(.p-inputtext),
-:deep(.p-password-input) {
-  width: 100%;
-}
-
-/* Responsividade completa */
-@media (max-width: 768px) {
-  .login-container {
-    padding: 2rem 1.5rem;
-  }
-
-  .login-card {
-    padding: 2.5rem 2rem;
-    max-width: 100%;
-  }
-
-  .login-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .login-header i {
-    font-size: 2.5rem !important;
-  }
-
-  .login-form {
-    gap: 1.25rem;
-  }
-
-  .login-button {
-    padding: 0.875rem;
-    font-size: 1rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .login-container {
-    padding: 1.5rem 1rem;
-  }
-
-  .login-card {
-    padding: 2rem 1.5rem;
-    border-radius: 20px;
-  }
-
-  .login-header {
-    margin-bottom: 2rem;
-  }
-
-  .login-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .login-header i {
-    font-size: 2.25rem !important;
-  }
-
-  .login-header p {
-    font-size: 0.9rem;
-  }
-
-  .field label {
-    font-size: 0.875rem;
-  }
-
-  :deep(.p-inputtext),
-  :deep(.p-password-input) {
-    padding: 0.75rem 0.875rem;
-    font-size: 0.95rem;
-  }
-
-  .login-button {
-    padding: 0.75rem;
-    font-size: 0.95rem;
-  }
-
-  .register-link {
-    font-size: 0.875rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
-  }
-}
-
-@media (max-width: 360px) {
-  .login-card {
-    padding: 1.5rem 1.25rem;
-  }
-
-  .login-header h1 {
-    font-size: 1.35rem;
-  }
-}
-
-.page-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
-  font-size: 0.95rem;
-  z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-}
-
-.page-footer p {
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .page-footer {
-    position: relative;
-    padding: 1.25rem;
-    font-size: 0.875rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .page-footer {
-    padding: 1rem;
-    font-size: 0.8rem;
-  }
+  @apply bg-slate-800 border-blue-500 ring-4 ring-blue-500/20;
 }
 </style>

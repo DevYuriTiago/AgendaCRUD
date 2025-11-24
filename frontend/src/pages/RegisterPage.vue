@@ -192,38 +192,19 @@ const handleSubmit = async () => {
 
 <style scoped>
 .register-container {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  padding: 2rem;
-  position: relative;
-  overflow: hidden;
+  @apply min-h-screen w-full flex items-center justify-center bg-slate-950 relative overflow-hidden p-8;
 }
 
 .register-container::before {
   content: '';
-  position: absolute;
-  width: 350px;
-  height: 350px;
-  background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
-  border-radius: 50%;
-  top: -120px;
-  right: -120px;
-  animation: float 7s ease-in-out infinite;
+  @apply absolute w-[350px] h-[350px] rounded-full top-[-120px] right-[-120px] animate-[float_7s_ease-in-out_infinite];
+  background: radial-gradient(circle, rgba(255,255,255,0.05) 0%, transparent 70%);
 }
 
 .register-container::after {
   content: '';
-  position: absolute;
-  width: 450px;
-  height: 450px;
-  background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
-  border-radius: 50%;
-  bottom: -180px;
-  left: -180px;
-  animation: float 9s ease-in-out infinite reverse;
+  @apply absolute w-[450px] h-[450px] rounded-full bottom-[-180px] left-[-180px] animate-[float_9s_ease-in-out_infinite_reverse];
+  background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
 }
 
 @keyframes float {
@@ -232,17 +213,10 @@ const handleSubmit = async () => {
 }
 
 .register-card {
-  background: rgba(255, 255, 255, 0.95);
+  @apply w-full max-w-[540px] p-12 relative z-10 rounded-3xl border border-white/10 shadow-2xl animate-[fadeInUp_0.6s_cubic-bezier(0.16,1,0.3,1)];
+  background: rgba(15, 23, 42, 0.6);
   backdrop-filter: blur(20px);
-  border-radius: 24px;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.25), 0 0 1px rgba(255, 255, 255, 0.5) inset;
-  padding: 3rem;
-  width: 100%;
-  max-width: 540px;
-  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  position: relative;
-  z-index: 1;
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.5), 0 0 1px rgba(255, 255, 255, 0.1) inset;
 }
 
 @keyframes fadeInUp {
@@ -257,300 +231,200 @@ const handleSubmit = async () => {
 }
 
 .register-header {
-  text-align: center;
-  margin-bottom: 2.5rem;
+  @apply text-center mb-10;
 }
 
 .register-header i {
-  color: #667eea;
-  margin-bottom: 1rem;
-  filter: drop-shadow(0 4px 12px rgba(102, 126, 234, 0.4));
-  animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.05); }
+  @apply text-blue-500 mb-4 drop-shadow-[0_4px_12px_rgba(59,130,246,0.4)] animate-pulse;
 }
 
 .register-header h1 {
-  font-size: 2rem;
-  margin: 0.5rem 0;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
+  @apply text-3xl my-2 font-bold bg-gradient-to-br from-blue-400 to-indigo-400 bg-clip-text text-transparent;
 }
 
 .register-header p {
-  color: #718096;
-  margin: 0;
-  font-weight: 500;
+  @apply text-slate-400 font-medium m-0;
 }
 
 .register-form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
+  @apply flex flex-col gap-5;
 }
 
 .field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
+  @apply flex flex-col gap-2;
 }
 
 .field label {
-  font-weight: 600;
-  color: #2d3748;
-  font-size: 0.95rem;
-  letter-spacing: 0.3px;
+  @apply font-semibold text-slate-200 text-[0.95rem] tracking-wide;
 }
 
 :deep(.p-inputtext),
 :deep(.p-password-input) {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  font-size: 1rem;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  background: #f8fafc;
+  @apply w-full p-3.5 border-2 border-slate-700 rounded-xl text-base transition-all duration-300 bg-slate-800/50 text-white placeholder:text-slate-500;
 }
 
 :deep(.p-inputtext:hover),
 :deep(.p-password-input:hover) {
-  border-color: #cbd5e0;
-  background: #fff;
+  @apply border-slate-600 bg-slate-800;
 }
 
 :deep(.p-inputtext:focus),
 :deep(.p-password-input:focus) {
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12), 0 4px 12px rgba(102, 126, 234, 0.15);
-  background: #fff;
-  transform: translateY(-1px);
+  @apply border-blue-500 ring-4 ring-blue-500/20 bg-slate-800 -translate-y-[1px];
 }
 
 .register-button {
-  margin-top: 1rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  padding: 1rem;
-  font-size: 1.1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  overflow: hidden;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  @apply mt-4 bg-gradient-to-br from-blue-600 to-indigo-600 border-0 p-4 text-lg font-semibold rounded-xl transition-all duration-300 relative overflow-hidden shadow-lg shadow-blue-500/30 text-white;
 }
 
 .register-button::before {
   content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
+  @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-[left] duration-500;
 }
 
 .register-button:hover::before {
-  left: 100%;
+  @apply left-full;
 }
 
 .register-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
+  @apply -translate-y-0.5 shadow-xl shadow-blue-500/50;
 }
 
 .register-button:active {
-  transform: translateY(0);
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+  @apply translate-y-0 shadow-lg shadow-blue-500/30;
 }
 
 .register-button:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  transform: none !important;
-  box-shadow: none !important;
+  @apply opacity-60 cursor-not-allowed transform-none shadow-none;
 }
 
 .login-link {
-  text-align: center;
-  margin-top: 1.5rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
-  color: #718096;
-  font-size: 0.95rem;
+  @apply text-center mt-6 pt-6 border-t border-slate-800 text-slate-400 text-[0.95rem];
 }
 
 .login-link a {
-  color: #667eea;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s ease;
-  position: relative;
-  padding-bottom: 2px;
+  @apply text-blue-400 font-semibold no-underline transition-all duration-200 relative pb-[2px];
 }
 
 .login-link a::after {
   content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
-  transition: width 0.3s ease;
+  @apply absolute bottom-0 left-0 w-0 h-[2px] bg-gradient-to-r from-blue-400 to-indigo-400 transition-[width] duration-300;
 }
 
 .login-link a:hover::after {
-  width: 100%;
+  @apply w-full;
 }
 
 .login-link a:hover {
-  color: #764ba2;
+  @apply text-indigo-400;
 }
 
 .p-error {
-  color: #ef4444;
-  font-size: 0.875rem;
+  @apply text-red-400 text-sm;
 }
 
 :deep(.p-inputtext),
 :deep(.p-password-input) {
-  width: 100%;
+  @apply w-full;
 }
 
 /* Responsividade completa */
 @media (max-width: 768px) {
   .register-container {
-    padding: 2rem 1.5rem;
+    @apply p-8;
   }
 
   .register-card {
-    padding: 2.5rem 2rem;
-    max-width: 100%;
+    @apply p-10 max-w-full;
   }
 
   .register-header h1 {
-    font-size: 1.75rem;
-  }
-
-  .register-header i {
-    font-size: 2.5rem !important;
+    @apply text-3xl;
   }
 
   .register-form {
-    gap: 1.15rem;
+    @apply gap-5;
   }
 
   .register-button {
-    padding: 0.875rem;
-    font-size: 1rem;
+    @apply p-3.5 text-base;
   }
 }
 
 @media (max-width: 480px) {
   .register-container {
-    padding: 1.5rem 1rem;
+    @apply p-6;
   }
 
   .register-card {
-    padding: 2rem 1.5rem;
-    border-radius: 20px;
+    @apply p-8 rounded-[20px];
   }
 
   .register-header {
-    margin-bottom: 2rem;
+    @apply mb-8;
   }
 
   .register-header h1 {
-    font-size: 1.5rem;
-  }
-
-  .register-header i {
-    font-size: 2.25rem !important;
+    @apply text-2xl;
   }
 
   .register-header p {
-    font-size: 0.9rem;
+    @apply text-sm;
   }
 
   .register-form {
-    gap: 1rem;
+    @apply gap-4;
   }
 
   .field label {
-    font-size: 0.875rem;
+    @apply text-sm;
   }
 
   :deep(.p-inputtext),
   :deep(.p-password-input) {
-    padding: 0.75rem 0.875rem;
-    font-size: 0.95rem;
+    @apply p-3 text-[0.95rem];
   }
 
   .register-button {
-    padding: 0.75rem;
-    font-size: 0.95rem;
-    margin-top: 0.75rem;
+    @apply p-3 text-[0.95rem] mt-3;
   }
 
   .login-link {
-    font-size: 0.875rem;
-    margin-top: 1.25rem;
-    padding-top: 1.25rem;
+    @apply text-sm mt-5 pt-5;
   }
 }
 
 @media (max-width: 360px) {
   .register-card {
-    padding: 1.5rem 1.25rem;
+    @apply p-6;
   }
 
   .register-header h1 {
-    font-size: 1.35rem;
+    @apply text-[1.35rem];
   }
 
   .register-form {
-    gap: 0.875rem;
+    @apply gap-3.5;
   }
 }
 
 .page-footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.9);
-  font-weight: 500;
-  font-size: 0.95rem;
-  z-index: 1;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  @apply absolute bottom-0 left-0 right-0 p-6 text-center text-white/90 font-medium text-[0.95rem] z-10 drop-shadow-md;
 }
 
 .page-footer p {
-  margin: 0;
+  @apply m-0;
 }
 
 @media (max-width: 768px) {
   .page-footer {
-    position: relative;
-    padding: 1.25rem;
-    font-size: 0.875rem;
+    @apply relative p-5 text-sm;
   }
 }
 
 @media (max-width: 480px) {
   .page-footer {
-    padding: 1rem;
-    font-size: 0.8rem;
+    @apply p-4 text-xs;
   }
 }
 </style>

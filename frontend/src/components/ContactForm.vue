@@ -160,22 +160,15 @@ function clearFieldError(field) {
 
 <style scoped>
 .contact-form {
-  background: white;
-  border-radius: 0;
-  padding: 2.5rem;
+  @apply bg-transparent p-10;
 }
 
 .form-grid {
-  display: grid;
-  gap: 1.75rem;
-  margin-bottom: 2rem;
+  @apply grid gap-7 mb-8;
 }
 
 .form-field {
-  display: flex;
-  flex-direction: column;
-  gap: 0.625rem;
-  animation: fadeInUp 0.4s ease-out backwards;
+  @apply flex flex-col gap-2.5 animate-[fadeInUp_0.4s_ease-out_backwards];
 }
 
 .form-field:nth-child(1) { animation-delay: 0.05s; }
@@ -194,166 +187,112 @@ function clearFieldError(field) {
 }
 
 .form-label {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  font-weight: 700;
-  color: #334155;
-  font-size: 0.95rem;
-  letter-spacing: 0.2px;
+  @apply flex items-center gap-2.5 font-bold text-slate-200 text-[0.95rem] tracking-wide;
 }
 
 .form-label i {
-  color: #667eea;
-  font-size: 1rem;
+  @apply text-blue-400 text-base;
 }
 
 :deep(.p-inputtext),
 :deep(.p-inputmask) {
-  width: 100%;
-  padding: 0.875rem 1rem;
-  border: 2px solid #e2e8f0;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1rem;
-  background: #f8fafc;
+  @apply w-full p-3.5 border-2 border-slate-700 rounded-xl transition-all duration-300 text-base bg-slate-800/50 text-white placeholder:text-slate-500;
 }
 
 :deep(.p-inputtext:hover),
 :deep(.p-inputmask:hover) {
-  border-color: #cbd5e0;
-  background: white;
+  @apply border-slate-600 bg-slate-800;
 }
 
 :deep(.p-inputtext:focus),
 :deep(.p-inputmask:focus) {
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.12), 0 4px 12px rgba(102, 126, 234, 0.15);
-  background: white;
-  transform: translateY(-1px);
+  @apply border-blue-500 ring-4 ring-blue-500/20 bg-slate-800 -translate-y-[1px];
 }
 
 :deep(.p-inputtext.p-invalid),
 :deep(.p-inputmask.p-invalid) {
-  border-color: #ef4444;
-  background: #fef2f2;
+  @apply border-red-500 bg-red-900/10;
 }
 
 .p-error {
-  color: #ef4444;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-weight: 500;
+  @apply text-red-400 text-sm mt-1 flex items-center gap-1.5 font-medium;
 }
 
 .form-actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 1rem;
-  padding-top: 1.5rem;
-  border-top: 2px solid #f1f5f9;
-  animation: fadeInUp 0.4s ease-out 0.2s backwards;
+  @apply flex justify-end gap-4 pt-6 border-t-2 border-slate-800 animate-[fadeInUp_0.4s_ease-out_0.2s_backwards];
 }
 
 :deep(.p-button) {
-  padding: 0.875rem 1.75rem;
-  border-radius: 12px;
-  font-weight: 600;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  font-size: 1rem;
+  @apply py-3.5 px-7 rounded-xl font-semibold transition-all duration-300 text-base;
 }
 
 :deep(.p-button-text) {
-  color: #64748b;
-}
-
-:deep(.p-button-text:hover) {
-  background: #f1f5f9;
-  color: #334155;
+  @apply text-slate-400 hover:bg-slate-800 hover:text-slate-200;
 }
 
 :deep(.p-button-primary) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.35);
-  position: relative;
-  overflow: hidden;
+  @apply bg-gradient-to-br from-blue-600 to-indigo-600 border-0 shadow-lg shadow-blue-500/30 relative overflow-hidden;
 }
 
 :deep(.p-button-primary::before) {
   content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
+  @apply absolute top-0 -left-full w-full h-full bg-gradient-to-r from-transparent via-white/30 to-transparent transition-[left] duration-500;
 }
 
 :deep(.p-button-primary:hover::before) {
-  left: 100%;
+  @apply left-full;
 }
 
 :deep(.p-button-primary:hover) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+  @apply -translate-y-0.5 shadow-xl shadow-blue-500/50;
 }
 
 :deep(.p-button-primary:active) {
-  transform: translateY(0);
+  @apply translate-y-0;
 }
 
 @media (max-width: 768px) {
   .contact-form {
-    padding: 1.5rem;
+    @apply p-6;
   }
 
   .form-grid {
-    gap: 1.5rem;
+    @apply gap-6;
   }
 
   .form-actions {
-    flex-direction: column-reverse;
-    gap: 0.875rem;
+    @apply flex-col-reverse gap-3.5;
   }
 
   :deep(.p-button) {
-    width: 100%;
-    justify-content: center;
+    @apply w-full justify-center;
   }
 }
 
 @media (max-width: 480px) {
   .contact-form {
-    padding: 1.25rem;
+    @apply p-5;
   }
 
   .form-grid {
-    gap: 1.25rem;
-    margin-bottom: 1.5rem;
+    @apply gap-5 mb-6;
   }
 
   .form-label {
-    font-size: 0.875rem;
+    @apply text-sm;
   }
 
   :deep(.p-inputtext),
   :deep(.p-inputmask) {
-    padding: 0.75rem 0.875rem;
-    font-size: 0.95rem;
+    @apply py-3 px-3.5 text-[0.95rem];
   }
 
   :deep(.p-button) {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.95rem;
+    @apply py-3 px-6 text-[0.95rem];
   }
 
   .form-actions {
-    padding-top: 1.25rem;
+    @apply pt-5;
   }
 }
 </style>

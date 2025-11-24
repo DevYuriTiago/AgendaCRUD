@@ -1,26 +1,56 @@
 <template>
-  <div class="contacts-page fade-in">
-    <div class="page-header">
-      <div class="header-content">
-        <div>
-          <h1 class="page-title">Gerenciar Seus Contatos</h1>
-          <p class="page-subtitle">Crie, edite e organize sua lista de contatos de forma eficiente</p>
+  <div class="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
+    <!-- Background Pattern -->
+    <div class="absolute inset-0 z-0">
+      <div class="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+      <div class="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
+    </div>
+
+    <div class="relative z-10 container mx-auto px-4 py-12">
+      <!-- Header Section -->
+      <div class="mb-12 flex flex-col items-center justify-between gap-6 md:flex-row">
+        <div class="space-y-2 text-center md:text-left">
+          <h1 class="text-4xl font-bold tracking-tighter sm:text-5xl md:text-6xl bg-gradient-to-b from-foreground to-foreground/70 bg-clip-text text-transparent">
+            Contatos
+          </h1>
+          <p class="max-w-[600px] text-muted-foreground md:text-xl/relaxed lg:text-base/relaxed xl:text-xl/relaxed">
+            Gerencie sua rede de contatos com estilo e eficiência.
+          </p>
         </div>
-        <Button
-          label="Novo Contato"
-          icon="pi pi-plus"
-          class="p-button-lg create-button"
-          @click="openCreateDialog"
+        
+        <ShimmerButton @click="openCreateDialog">
+          <span class="whitespace-pre-wrap text-center text-sm font-medium leading-none tracking-tight text-white dark:from-white dark:to-slate-900/10 lg:text-lg">
+            Novo Contato
+          </span>
+        </ShimmerButton>
+      </div>
+
+      <!-- Loading State -->
+      <div v-if="contactStore.loading" class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+        <div v-for="i in 6" :key="i" class="h-[200px] rounded-xl border bg-card/50 animate-pulse"></div>
+      </div>
+
+      <!-- Empty State -->
+      <div v-else-if="contactStore.sortedContacts.length === 0" class="flex flex-col items-center justify-center py-20 text-center">
+        <div class="rounded-full bg-muted p-6 mb-4">
+          <i class="pi pi-users text-4xl text-muted-foreground"></i>
+        </div>
+        <h3 class="text-xl font-semibold">Nenhum contato encontrado</h3>
+        <p class="text-muted-foreground mt-2 mb-6">Comece adicionando seu primeiro contato.</p>
+        <Button label="Adicionar Contato" icon="pi pi-plus" @click="openCreateDialog" />
+      </div>
+
+      <!-- Contacts Grid -->
+      <div v-else class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <ContactCard
+          v-for="contact in contactStore.sortedContacts"
+          :key="contact.id"
+          :contact="contact"
+          @edit="openEditDialog"
+          @delete="confirmDelete"
         />
       </div>
     </div>
-
-    <ContactTable
-      :contacts="contactStore.sortedContacts"
-      :loading="contactStore.loading"
-      @edit="openEditDialog"
-      @delete="confirmDelete"
-    />
 
     <!-- Create/Edit Dialog -->
     <Dialog
@@ -29,16 +59,26 @@
       :modal="true"
       :closable="true"
       :draggable="false"
-      class="contact-dialog"
-      :style="{ width: '600px' }"
+      class="contact-dialog p-0 overflow-hidden rounded-lg"
+      :style="{ width: '500px' }"
       @hide="resetDialog"
+      :pt="{
+        root: { class: 'bg-slate-900/80 backdrop-blur-xl border border-white/10 shadow-2xl' },
+        header: { class: 'bg-transparent border-b border-white/10 p-6' },
+        content: { class: 'bg-transparent p-0' },
+        title: { class: 'text-white font-semibold text-xl' },
+        closeButton: { class: 'text-slate-400 hover:text-white transition-colors' },
+        mask: { class: 'backdrop-blur-sm bg-black/50' }
+      }"
     >
-      <ContactForm
-        :contact="selectedContact"
-        :loading="contactStore.loading"
-        @submit="handleSubmit"
-        @cancel="closeDialog"
-      />
+      <div class="p-6">
+        <ContactForm
+          :contact="selectedContact"
+          :loading="contactStore.loading"
+          @submit="handleSubmit"
+          @cancel="closeDialog"
+        />
+      </div>
     </Dialog>
   </div>
 </template>
@@ -48,9 +88,10 @@ import { ref, onMounted } from 'vue'
 import { useContactStore } from '@/store/contactStore'
 import { useToast } from 'primevue/usetoast'
 import { useConfirm } from 'primevue/useconfirm'
-import Button from 'primevue/button'
 import Dialog from 'primevue/dialog'
-import ContactTable from '@/components/ContactTable.vue'
+import Button from 'primevue/button'
+import ShimmerButton from '@/components/ui/ShimmerButton.vue'
+import ContactCard from '@/components/ui/ContactCard.vue'
 import ContactForm from '@/components/ContactForm.vue'
 
 const contactStore = useContactStore()
@@ -61,331 +102,67 @@ const dialogVisible = ref(false)
 const dialogMode = ref('create') // 'create' or 'edit'
 const selectedContact = ref(null)
 
-onMounted(async () => {
-  try {
-    await contactStore.fetchContacts()
-  } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Erro',
-      detail: 'Falha ao carregar contatos',
-      life: 3000
-    })
-  }
+onMounted(() => {
+  contactStore.fetchContacts()
 })
 
-function openCreateDialog() {
+const openCreateDialog = () => {
   dialogMode.value = 'create'
   selectedContact.value = null
   dialogVisible.value = true
 }
 
-function openEditDialog(contact) {
+const openEditDialog = (contact) => {
   dialogMode.value = 'edit'
   selectedContact.value = { ...contact }
   dialogVisible.value = true
 }
 
-function closeDialog() {
+const closeDialog = () => {
   dialogVisible.value = false
   resetDialog()
 }
 
-function resetDialog() {
+const resetDialog = () => {
   selectedContact.value = null
   dialogMode.value = 'create'
 }
 
-async function handleSubmit(contactData) {
+const handleSubmit = async (formData) => {
   try {
     if (dialogMode.value === 'create') {
-      await contactStore.createContact(contactData)
-      toast.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Contato criado com sucesso',
-        life: 3000
-      })
+      await contactStore.createContact(formData)
+      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Contato criado com sucesso', life: 3000 })
     } else {
-      await contactStore.updateContact(selectedContact.value.id, contactData)
-      toast.add({
-        severity: 'success',
-        summary: 'Sucesso',
-        detail: 'Contato atualizado com sucesso',
-        life: 3000
-      })
+      await contactStore.updateContact(selectedContact.value.id, formData)
+      toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Contato atualizado com sucesso', life: 3000 })
     }
     closeDialog()
+    contactStore.fetchContacts() // Refresh list
   } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Erro',
-      detail: error.message || 'Operação falhou',
-      life: 5000
-    })
+    toast.add({ severity: 'error', summary: 'Erro', detail: error.message || 'Ocorreu um erro ao salvar', life: 3000 })
   }
 }
 
-function confirmDelete(contact) {
+const confirmDelete = (contact) => {
   confirm.require({
-    message: `Tem certeza que deseja excluir "${contact.name}"?`,
+    message: `Tem certeza que deseja excluir ${contact.name}?`,
     header: 'Confirmar Exclusão',
     icon: 'pi pi-exclamation-triangle',
     acceptClass: 'p-button-danger',
-    accept: () => handleDelete(contact.id)
+    accept: async () => {
+      try {
+        await contactStore.deleteContact(contact.id)
+        toast.add({ severity: 'success', summary: 'Sucesso', detail: 'Contato excluído com sucesso', life: 3000 })
+        contactStore.fetchContacts()
+      } catch (error) {
+        toast.add({ severity: 'error', summary: 'Erro', detail: 'Erro ao excluir contato', life: 3000 })
+      }
+    }
   })
-}
-
-async function handleDelete(contactId) {
-  try {
-    await contactStore.deleteContact(contactId)
-    toast.add({
-      severity: 'success',
-      summary: 'Sucesso',
-      detail: 'Contato excluído com sucesso',
-      life: 3000
-    })
-  } catch (error) {
-    toast.add({
-      severity: 'error',
-      summary: 'Erro',
-      detail: error.message || 'Falha ao excluir contato',
-      life: 5000
-    })
-  }
 }
 </script>
 
 <style scoped>
-.contacts-page {
-  animation: fadeIn 0.5s cubic-bezier(0.16, 1, 0.3, 1);
-  min-height: 100vh;
-  background: linear-gradient(135deg, #f5f7fa 0%, #e3e7f0 100%);
-  padding: 2rem;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.page-header {
-  margin-bottom: 2rem;
-  padding: 2.5rem;
-  background: linear-gradient(135deg, rgba(255,255,255,0.95) 0%, rgba(255,255,255,0.9) 100%);
-  backdrop-filter: blur(20px);
-  border-radius: 20px;
-  box-shadow: 0 10px 40px rgba(102, 126, 234, 0.15), 0 0 1px rgba(255,255,255,0.5) inset;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  position: relative;
-  overflow: hidden;
-}
-
-.page-header::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-}
-
-.header-content {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
-}
-
-.page-title {
-  margin: 0 0 0.5rem 0;
-  font-size: 2.25rem;
-  font-weight: 800;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  letter-spacing: -0.5px;
-}
-
-.page-subtitle {
-  margin: 0;
-  color: #64748b;
-  font-size: 1.1rem;
-  font-weight: 500;
-}
-
-.create-button {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  border: none;
-  padding: 1rem 2rem;
-  font-size: 1rem;
-  font-weight: 600;
-  border-radius: 12px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.35);
-  position: relative;
-  overflow: hidden;
-}
-
-.create-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
-  transition: left 0.5s;
-}
-
-.create-button:hover::before {
-  left: 100%;
-}
-
-.create-button:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 8px 30px rgba(102, 126, 234, 0.5);
-}
-
-.create-button:active {
-  transform: translateY(-1px);
-}
-
-:deep(.contact-dialog .p-dialog) {
-  border-radius: 20px;
-  overflow: hidden;
-  box-shadow: 0 25px 80px rgba(0, 0, 0, 0.3);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-}
-
-:deep(.contact-dialog .p-dialog-header) {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 2rem 2.5rem !important;
-  border-radius: 0;
-  border-bottom: none;
-  min-height: 90px;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: space-between !important;
-  gap: 1.5rem !important;
-}
-
-:deep(.contact-dialog .p-dialog-header .p-dialog-header-icons) {
-  margin: 0 !important;
-  padding: 0 !important;
-}
-
-:deep(.contact-dialog .p-dialog-title) {
-  font-weight: 700;
-  font-size: 1.5rem;
-  letter-spacing: -0.3px;
-  line-height: 1.4;
-  padding: 0.5rem 1rem 0.5rem 0.5rem !important;
-  margin: 0 !important;
-  flex: 1;
-}
-
-:deep(.contact-dialog .p-dialog-header-icon) {
-  color: white;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 50%;
-  transition: all 0.2s ease;
-}
-
-:deep(.contact-dialog .p-dialog-header-icon:hover) {
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(90deg);
-}
-
-:deep(.contact-dialog .p-dialog-content) {
-  padding: 0;
-  border-radius: 0;
-  background: #fff;
-}
-
-@media (max-width: 768px) {
-  .contacts-page {
-    padding: 1rem;
-  }
-
-  .page-header {
-    padding: 1.5rem;
-    margin-bottom: 1.5rem;
-  }
-
-  .header-content {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 1.5rem;
-  }
-
-  .create-button {
-    width: 100%;
-    justify-content: center;
-  }
-
-  .page-title {
-    font-size: 1.75rem;
-  }
-
-  .page-subtitle {
-    font-size: 1rem;
-  }
-
-  :deep(.contact-dialog) {
-    width: 95vw !important;
-    max-width: 95vw !important;
-  }
-
-  :deep(.contact-dialog .p-dialog-header) {
-    padding: 1.5rem 2rem;
-  }
-
-  :deep(.contact-dialog .p-dialog-title) {
-    font-size: 1.25rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .contacts-page {
-    padding: 0.75rem;
-  }
-
-  .page-header {
-    padding: 1.25rem;
-    margin-bottom: 1rem;
-  }
-
-  .page-title {
-    font-size: 1.5rem;
-  }
-
-  .page-subtitle {
-    font-size: 0.9rem;
-  }
-
-  .create-button {
-    padding: 0.875rem 1.5rem;
-    font-size: 0.95rem;
-  }
-
-  :deep(.contact-dialog .p-dialog-header) {
-    padding: 1.25rem 1.5rem;
-  }
-
-  :deep(.contact-dialog .p-dialog-title) {
-    font-size: 1.1rem;
-  }
-}
+/* Scoped styles if needed, but mostly using Tailwind now */
 </style>
