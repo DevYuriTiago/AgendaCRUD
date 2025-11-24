@@ -68,6 +68,7 @@
 import { ref, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/store/authStore'
+import { useToast } from 'primevue/usetoast'
 import Toast from 'primevue/toast'
 import ConfirmDialog from 'primevue/confirmdialog'
 import Button from 'primevue/button'
@@ -75,6 +76,7 @@ import Menu from 'primevue/menu'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const toast = useToast()
 const menu = ref(null)
 
 const menuItems = ref([
@@ -82,7 +84,12 @@ const menuItems = ref([
     label: 'Perfil',
     icon: 'pi pi-user',
     command: () => {
-      // router.push('/profile')
+      toast.add({
+        severity: 'info',
+        summary: 'Em breve!',
+        detail: 'Funcionalidade de perfil será implementada em breve.',
+        life: 3000
+      })
     }
   },
   {
