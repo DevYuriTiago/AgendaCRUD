@@ -270,7 +270,7 @@ async function handleDelete(contactId) {
 :deep(.contact-dialog .p-dialog-header) {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 1.75rem 2rem;
+  padding: 2rem 2.5rem;
   border-radius: 0;
   border-bottom: none;
 }
@@ -279,6 +279,7 @@ async function handleDelete(contactId) {
   font-weight: 700;
   font-size: 1.5rem;
   letter-spacing: -0.3px;
+  line-height: 1.3;
 }
 
 :deep(.contact-dialog .p-dialog-header-icon) {
@@ -335,7 +336,7 @@ async function handleDelete(contactId) {
   }
 
   :deep(.contact-dialog .p-dialog-header) {
-    padding: 1.25rem 1.5rem;
+    padding: 1.5rem 2rem;
   }
 
   :deep(.contact-dialog .p-dialog-title) {
@@ -367,7 +368,7 @@ async function handleDelete(contactId) {
   }
 
   :deep(.contact-dialog .p-dialog-header) {
-    padding: 1rem 1.25rem;
+    padding: 1.25rem 1.5rem;
   }
 
   :deep(.contact-dialog .p-dialog-title) {
